@@ -9,9 +9,10 @@
   - [Instalaicon Spring Boot](#instalaicon-spring-boot)
     - [Poner en Español STS](#poner-en-español-sts)
   - [Crear un nuevo Proyecto](#crear-un-nuevo-proyecto)
+  - [Estructura de un proyecto](#estructura-de-un-proyecto)
   - [CRUD](#crud)
     - [Consultas Genericas](#consultas-genericas)
-    - [CRUD Completos](#crud-completos)
+    - [CRUD Completo](#crud-completo)
 
 ## ¿Que es Spring Boot?
 Spring Boot es un framework de desarrollo de aplicaciones Java que simplifica la configuración y el desarrollo mediante la automatización de tareas repetitivas. Proporciona configuraciones predeterminadas inteligentes y herramientas integradas para crear aplicaciones rápidamente con un mínimo esfuerzo.
@@ -108,6 +109,37 @@ Crear el proyecto desde [start.spring.io](https://start.spring.io):
 3. Guardamos el archivo en nuestra area de trabajo de STS para tenerlo más controlado
 
 4. Entramos dentro de STS y vamos a: Archivo>Incorporar proyectos del sistema de archivos. Pulsamos directorio y lo buscamos
+
+## Estructura de un proyecto
+```scss
+nombre_proyecto/
+│
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── soltel/
+│   │   │           └── islantilla/
+│   │   │               ├── controllers/        (Controladores de Spring MVC)
+│   │   │               ├── models/             (Entidades o modelos de datos)
+│   │   │               ├── repositories/       (Interfaces de repositorio JPA)
+│   │   │               ├── services/           (Clases de servicio)
+│   │   │               └── IslantillaApplication.java  (Clase principal de la aplicación)
+│   │   │
+│   │   ├── resources/
+│   │   │   ├── static/        (Archivos estáticos como CSS, JS, imágenes)
+│   │   │   ├── templates/     (Plantillas de vistas Thymeleaf, Freemarker, etc.)
+│   │   │   ├── application.properties  (Archivo de propiedades de la aplicación)
+│   │   │   └── ...            (Otros recursos como archivos de configuración, SQL, etc.)
+│   │   │
+│   │   └── webapp/            (Recursos específicos de la web, como archivos JSP)
+│   │
+│   └── test/
+│       └── java/              (Pruebas unitarias y de integración)
+│
+└── target/                    (Directorio de salida de compilación y empaquetado)
+
+```
 
 ## CRUD
 ### Consultas Genericas
@@ -250,8 +282,9 @@ public class ClientesController {
 
 ```
 
-### CRUD Completos
+### CRUD Completo
 
+Modificamos el Servicio /src/main/java/nombre_pro/services/ClientesServices
 ```java
 @Service
 public class ClientesService {
@@ -299,3 +332,91 @@ public class ClientesService {
     }
 }
 ```
+
+Modificamos el Controlador /src/main/java/nombre_pro/controllers/ClientesController
+
+```java
+@RestController
+@RequestMapping("/clientes")        // localhost/clientes
+public class ClientesController {
+
+    private final ClientesService clientesService;
+
+    public ClientesController(ClientesService clientesService) {
+        this.clientesService = clientesService;
+    }
+
+    // [1b] CREATE (guardar)
+    @PostMapping
+    public ClientesModel saveCliente(@RequestBody ClientesModel cliente){
+        return this.clientesService.saveCliente(cliente);
+    }
+
+    // [2b] READ (Consultar)
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> getClienteById(@PathVariable Integer id){
+        Optional<ClientesModel> cliente = this.clientesService.getById(id);
+        return cliente.map(ResponseEntity::ok)
+                      .orElse(ResponseEntity.notFound().build());
+    }
+
+    // [3b] UPDATE (Actualizar)
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<?> updateClienteById(@RequestBody ClientesModel cliente, @PathVariable Integer id){
+        ClientesModel updatedCliente = this.clientesService.updateById(cliente, id);
+        if (updatedCliente != null) {
+            return ResponseEntity.ok(updatedCliente);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // [4b] DELETE (Borrar)
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<String> deleteClienteById(@PathVariable Integer id){
+        boolean deleted = this.clientesService.deleteCliente(id);
+        if (deleted) {
+            return ResponseEntity.ok("Cliente con id " + id + " borrado!");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+}
+```
+
+Creamos un endpoint para ver que todo funciona correctamente
+```java
+package com.soltel.islantilla;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@SpringBootApplication
+@RestController
+public class SpringBootApplication {
+
+	@RequestMapping(value = "/")
+    public String index() {
+        return "<h1>Bienvenidos a mi repo!</h1>";
+    }
+	
+	@RequestMapping(value = "/menu")
+    public String menu() {
+        return "<h1>Menu Principal</h1>";
+    }
+	
+	@RequestMapping(value = "/fin")
+    public String fin() {
+        return "<h1>Fin Aplicación</h1>";
+    }
+	
+	public static void main(String[] args) {
+		SpringApplication.run(SpringBootApplication.class, args);
+	}
+
+}
+```
+
+Por ultimo Probamos con STS: Botón derecho sobre el proyecto > Ejecutar como > Spring Boot App.
