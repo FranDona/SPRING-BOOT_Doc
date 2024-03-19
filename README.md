@@ -10,6 +10,7 @@
     - [Poner en Español STS](#poner-en-español-sts)
   - [Crear un nuevo Proyecto](#crear-un-nuevo-proyecto)
   - [Estructura de un proyecto](#estructura-de-un-proyecto)
+  - [Añadir Swagger UI al Proyecto](#añadir-swagger-ui-al-proyecto)
   - [CRUD](#crud)
     - [Consultas Genericas](#consultas-genericas)
     - [CRUD Completo](#crud-completo)
@@ -140,6 +141,29 @@ nombre_proyecto/
 └── target/                    (Directorio de salida de compilación y empaquetado)
 
 ```
+## Añadir Swagger UI al Proyecto
+
+1. Nos dirigimos al archivo pom-xml del proyecto
+2. En la zona de las dependencias ```<dependencies>``` añadimos el siguiente código
+   ```xml
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- SpringDoc OpenAPI UI -->
+         <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+   ```
+3. Botón derecho en nuestro proyecto>Ejecutar como>Maven build
+4. En el apartado de Goals ponemos: clean install -DskipTest y finalizamos
+5. Reiniciamos nuestro proyecto
+6. Probamos en nuestro navegador http://localhost:8100/swagger-ui/index.html
+
 
 ## CRUD
 ### Consultas Genericas
@@ -150,7 +174,8 @@ Tendremos que hacer una serie de pasos:
    3. Usar la interfaz en el Servicio
    4. Implementar el controlador
 
-1. Modificamos el arvhivo ClientesModel /src/main/java/nombre_pro/repositories/ClietnesModelo
+1. Modificamos el archivo ClientesModel /src/main/java/nombre_pro/repositories/ClietnesModelo
+
 
 ```java
 package com.soltel.islantilla.models;
@@ -419,4 +444,4 @@ public class SpringBootApplication {
 }
 ```
 
-Por ultimo Probamos con STS: Botón derecho sobre el proyecto > Ejecutar como > Spring Boot App.
+Por último Probamos con STS: Botón derecho sobre el proyecto > Ejecutar como > Spring Boot App.
