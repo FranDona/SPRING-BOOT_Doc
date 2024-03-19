@@ -10,6 +10,7 @@
     - [Poner en Español STS](#poner-en-español-sts)
   - [Crear un nuevo Proyecto](#crear-un-nuevo-proyecto)
   - [Estructura de un proyecto](#estructura-de-un-proyecto)
+    - [Pasos básicos a seguir](#pasos-básicos-a-seguir)
   - [Añadir Swagger UI al Proyecto](#añadir-swagger-ui-al-proyecto)
   - [CRUD](#crud)
     - [Consultas Genericas](#consultas-genericas)
@@ -119,13 +120,13 @@ nombre_proyecto/
 │   ├── main/
 │   │   ├── java/
 │   │   │   └── com/
-│   │   │       └── soltel/
-│   │   │           └── islantilla/
+│   │   │       └── prueba/
+│   │   │           └── testproject/
 │   │   │               ├── controllers/        (Controladores de Spring MVC)
 │   │   │               ├── models/             (Entidades o modelos de datos)
 │   │   │               ├── repositories/       (Interfaces de repositorio JPA)
 │   │   │               ├── services/           (Clases de servicio)
-│   │   │               └── IslantillaApplication.java  (Clase principal de la aplicación)
+│   │   │               └── TestprojectApplication.java  (Clase principal de la aplicación)
 │   │   │
 │   │   ├── resources/
 │   │   │   ├── static/        (Archivos estáticos como CSS, JS, imágenes)
@@ -139,8 +140,22 @@ nombre_proyecto/
 │       └── java/              (Pruebas unitarias y de integración)
 │
 └── target/                    (Directorio de salida de compilación y empaquetado)
-
 ```
+### Pasos básicos a seguir
+1. **Creación del proyecto:** Utilizar Spring Initializr para generar un proyecto con las dependencias necesarias.
+   
+2. **Crear estructura del proyecto:** Crear las carpetas controllers, models, services y repositories
+   
+3. **Configuración de la bbdd:** Establecer las propiedades de conexión en application.properties.
+   
+4. **Creación de modelos:** Definir las clases de entidad en la carpeta **models** para mapear las tablas de la bbdd.
+   
+5. **Creación de repositorios:** Escribir interfaces que extiendan JpaRepository para acceder a los datos de la base de datos.
+
+6. **Implementación de servicios:** Desarrollar clases de servicio para realizar operaciones de lógica de negocio.
+
+7. **Definición de controladores:** Escribir clases de controlador para manejar las solicitudes HTTP y llamar a los servicios correspondientes.
+
 ## Añadir Swagger UI al Proyecto
 
 1. Nos dirigimos al archivo pom-xml del proyecto
